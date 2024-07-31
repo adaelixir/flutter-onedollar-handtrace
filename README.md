@@ -5,7 +5,7 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_onedollar_handtrace.svg)](https://pub.dev/packages/flutter_onedollar_handtrace)
 
-My Gesture Recognizer is a Flutter package that provides an easy way to recognize gestures and perform custom actions. It supports various types of gestures and provides a simple API for developers to integrate gesture recognition into their apps.
+A new Flutter Package for Gesture Trajectory Recognition using '$1 Unistroke Recognizer'
 
 ## Features
 

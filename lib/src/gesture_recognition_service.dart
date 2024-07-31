@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'recognizer/gesture_recognizer.dart';
-import 'recognizer/point.dart';
+import 'common/data/point.dart';
 import 'ui/gesture_drawing_view.dart';
 
 typedef GestureRecognitionCallback = void Function(String name, double score);

@@ -1,5 +1,5 @@
-import 'point.dart';
-import 'one_dollar_recognizer.dart';
+import '../common/data/point.dart';
+import '../onedollar/one_dollar_recognizer.dart';
 
 class GestureRecognizer {
   final OneDollarRecognizer _recognizer = OneDollarRecognizer();

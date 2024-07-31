@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onedollar_handtrace/src/recognizer/point.dart';
+import 'package:flutter_onedollar_handtrace/src/common/data/point.dart';
 
 class GestureDrawingView extends StatefulWidget {
   @override
