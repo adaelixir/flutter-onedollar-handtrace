@@ -12,28 +12,50 @@ class GestureRecognitionService {
   final GestureRecognizer recognizer = GestureRecognizer();
   final List<Point> points = [];
   bool isDrawing = false;
-  int startTime = 0;
+  bool isServiceActive = false;
 
   GestureRecognitionService(this.gestureDrawingView, this.callback);
 
-  bool handleTouchEvent(BuildContext context, PointerEvent event) {
-    if (event is PointerDownEvent) {
-      startTime = DateTime.now().millisecondsSinceEpoch;
-    } else if (event is PointerMoveEvent) {
-      if (isDrawing) {
-        points.add(Point(event.localPosition.dx, event.localPosition.dy));
-        gestureDrawingView.updatePoints(points);
-      }
-    } else if (event is PointerUpEvent) {
-      if (isDrawing) {
-        final result = recognizer.recognize(points);
-        callback(result.name, result.score);
-        isDrawing = false;
-        points.clear();
-      } else if (DateTime.now().millisecondsSinceEpoch - startTime > 500) {
-        isDrawing = true;
-      }
+  void activateService() {
+    isServiceActive = true;
+    points.clear();
+  }
+
+  void handlePanStart(DragStartDetails details) {
+    if (isServiceActive) {
+      isDrawing = true;
     }
-    return true;
+  }
+
+  void handlePanUpdate(DragUpdateDetails details) {
+    if (isDrawing) {
+      points.add(Point(details.localPosition.dx, details.localPosition.dy));
+      gestureDrawingView.updatePoints(points);
+    }
+  }
+
+  void handlePanEnd(DragEndDetails details) {
+    if (isDrawing) {
+      final result = recognizer.recognize(points);
+      callback(result.name, result.score);
+      isDrawing = false;
+      points.clear();
+    }
+  }
+
+  void handleScaleStart(ScaleStartDetails details) {
+    if (details.pointerCount == 2) {
+      activateService();
+    }
+  }
+
+  Widget buildGestureDetector(BuildContext context) {
+    return GestureDetector(
+      onPanStart: handlePanStart,
+      onPanUpdate: handlePanUpdate,
+      onPanEnd: handlePanEnd,
+      onScaleStart: handleScaleStart,
+      child: gestureDrawingView,
+    );
   }
 }
