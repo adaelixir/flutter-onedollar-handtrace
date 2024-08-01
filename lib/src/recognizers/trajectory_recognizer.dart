@@ -1,7 +1,7 @@
-import '../common/data/point.dart';
-import '../onedollar/one_dollar_recognizer.dart';
+import '../recognizers/common/data/point.dart';
+import '../recognizers/onedollar/one_dollar_recognizer.dart';
 
-class GestureRecognizer {
+class TrajectoryRecognizer {
   final OneDollarRecognizer _recognizer = OneDollarRecognizer();
 
   RecognitionResult recognize(List<Point> points) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class PopupResultView extends StatelessWidget {
+class PopupView extends StatelessWidget {
   final String gestureName;
   final double score;
 
-  PopupResultView({required this.gestureName, required this.score});
+  PopupView({required this.gestureName, required this.score});
 
   @override
   Widget build(BuildContext context) {
