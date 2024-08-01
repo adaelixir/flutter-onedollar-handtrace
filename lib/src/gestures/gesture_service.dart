@@ -25,13 +25,15 @@ class GestureService {
 
   void activateService() {
     isServiceActive = true;
-    // points.clear();
+    points.clear();
   }
 
   void handleScaleStart(ScaleStartDetails details) {
     if (details.pointerCount == 2) {
       isScaling = true;
       isDrawing = false;
+      isServiceActive = false;
+
       SnackbarView.showSnackbar(context, "请使用单指圈选区域");
     } else if (details.pointerCount == 1 && !isScaling) {
       isDrawing = true;
@@ -50,7 +52,9 @@ class GestureService {
   }
 
   void handleScaleEnd(ScaleEndDetails details) {
-    if (isDrawing) {
+    if (isScaling && details.pointerCount == 2) {
+      isScaling = false;
+    } else if (isDrawing) {
       final result = recognizer.recognize(points);
       callback(result.name, result.score);
       isDrawing = false;
