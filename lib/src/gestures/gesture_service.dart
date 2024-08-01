@@ -10,7 +10,6 @@ typedef GestureRecognitionCallback = void Function(String name, double score);
 class GestureService {
   final DrawingView drawingView;
   final GestureRecognitionCallback callback;
-  final SnackbarView snackbarView;
   final PopupView popupView;
   final BuildContext context;
 
@@ -20,23 +19,34 @@ class GestureService {
   bool isServiceActive = false;
   bool isScaling = false;
 
-  GestureService(this.drawingView, this.callback, this.snackbarView,
-      this.popupView, this.context);
+  GestureService(this.drawingView, this.callback, this.popupView, this.context);
 
   void activateService() {
     isServiceActive = true;
     points.clear();
   }
 
+  void deactivateService() {
+    isServiceActive = false;
+    points.clear();
+    drawingView.setDrawing(false); // 更新绘制状态
+  }
+
   void handleScaleStart(ScaleStartDetails details) {
     if (details.pointerCount == 2) {
       isScaling = true;
-      isDrawing = false;
-      isServiceActive = false;
-      SnackbarView.showSnackbar(context, "请使用单指圈选区域");
-    } else if (details.pointerCount == 1 && !isScaling) {
+      if (isServiceActive) {
+        // Deactivate service if it is already active
+        deactivateService();
+        SnackbarView.showSnackbar(context, "退出绘制模式");
+      } else {
+        // Activate service if it is not active
+        activateService();
+        SnackbarView.showSnackbar(context, "进入绘制模式");
+      }
+    } else if (details.pointerCount == 1 && isServiceActive && !isScaling) {
       isDrawing = true;
-      activateService();
+      points.clear(); // 清空之前的点
       drawingView.setDrawing(true); // 更新绘制状态
     }
   }
@@ -57,7 +67,8 @@ class GestureService {
       if (points.isNotEmpty) {
         final result = recognizer.recognize(points);
         callback(result.name, result.score);
-        PopupView(context).showPopup(
+        popupView.showPopup(
+          context,
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
