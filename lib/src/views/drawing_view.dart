@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import '../recognizers/common/data/point.dart';
 
 class DrawingView extends StatefulWidget {
+  final GlobalKey<_DrawingViewState> key = GlobalKey<_DrawingViewState>();
+
   @override
   _DrawingViewState createState() => _DrawingViewState();
 
-  // 添加 setDrawing 方法
+  // 修改 setDrawing 方法
   void setDrawing(bool drawing) {
-    _DrawingViewState? state = _DrawingViewState();
-    state?.setDrawing(drawing);
+    key.currentState?.setDrawing(drawing);
   }
 
-  // 添加 updatePoints 方法
+  // 修改 updatePoints 方法
   void updatePoints(List<Point> newPoints) {
-    _DrawingViewState? state = _DrawingViewState();
-    state?.updatePoints(newPoints);
+    key.currentState?.updatePoints(newPoints);
   }
 }
 
