@@ -31,8 +31,6 @@ class GestureService {
   void handleScaleStart(ScaleStartDetails details) {
     if (details.pointerCount == 2) {
       isScaling = true;
-      points.clear();
-      drawingView.updatePoints(points);
       SnackbarView.showSnackbar(context, "请使用单指圈选区域");
     } else if (details.pointerCount == 1 && !isScaling) {
       isDrawing = true;
