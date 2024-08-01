@@ -51,13 +51,12 @@ class GestureService {
   }
 
   void handleScaleEnd(ScaleEndDetails details) {
-    if (isScaling && details.pointerCount == 2) {
+    if (isScaling) {
       isScaling = false;
     } else if (isDrawing) {
       final result = recognizer.recognize(points);
       callback(result.name, result.score);
       isDrawing = false;
-      isScaling = false;
       points.clear();
       drawingView.setDrawing(false); // 更新绘制状态
       PopupView(context).showPopup(
