@@ -1,34 +1,21 @@
 import 'package:flutter/material.dart';
 
-class PopupView extends StatelessWidget {
-  final String gestureName;
-  final double score;
+class PopupView {
+  final BuildContext context;
 
-  PopupView({required this.gestureName, required this.score});
+  PopupView(this.context);
 
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Gesture Recognized',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16.0),
-            Text('Name: $gestureName'),
-            Text('Score: $score'),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      ),
+  void showPopup({required Widget content, double heightFraction = 1 / 3}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * heightFraction,
+          padding: EdgeInsets.all(16.0),
+          child: content,
+        );
+      },
     );
   }
 }

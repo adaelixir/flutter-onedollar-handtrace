@@ -28,9 +28,13 @@ class _DrawingViewState extends State<DrawingView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: DrawingPainter(_points, widget.drawingColor, widget.strokeWidth),
-      size: Size.infinite,
+    return Container(
+      color: Colors.transparent,
+      child: CustomPaint(
+        painter:
+            DrawingPainter(_points, widget.drawingColor, widget.strokeWidth),
+        child: Container(),
+      ),
     );
   }
 }
@@ -49,11 +53,12 @@ class DrawingPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
-    for (int i = 0; i < points.length - 1; i++) {
-      if (points[i] != null && points[i + 1] != null) {
-        canvas.drawLine(Offset(points[i].x, points[i].y),
-            Offset(points[i + 1].x, points[i + 1].y), paint);
-      }
+    for (int i = 1; i < points.length; i++) {
+      canvas.drawLine(
+        Offset(points[i - 1].x, points[i - 1].y),
+        Offset(points[i].x, points[i].y),
+        paint,
+      );
     }
   }
 

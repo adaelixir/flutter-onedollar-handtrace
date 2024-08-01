@@ -1,6 +1,6 @@
 name: flutter_onedollar_handtrace
 description: "A new Flutter Package for Gesture Trajectory Recognition using '$1 Unistroke Recognizer'"
-version: 0.0.5
+version: 0.1.3
 homepage: https://github.com/adaelixir/flutter_onedollar_handtrace
 
 environment:
