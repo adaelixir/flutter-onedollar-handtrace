@@ -2,54 +2,47 @@ import 'package:flutter/material.dart';
 import '../recognizers/common/data/point.dart';
 
 class DrawingView extends StatefulWidget {
-  final GlobalKey<_DrawingViewState> key = GlobalKey<_DrawingViewState>();
+  final GlobalKey<_DrawingViewState> key;
+
+  DrawingView({required this.key}) : super(key: key);
 
   @override
   _DrawingViewState createState() => _DrawingViewState();
 
-  // 添加 setDrawing 方法
-  void setDrawing(bool drawing) {
-    key.currentState?.setDrawing(drawing);
+  void setDrawing(bool isDrawing) {
+    key.currentState?.setDrawing(isDrawing);
   }
 
-  // 添加 updatePoints 方法
-  void updatePoints(List<Point> newPoints) {
-    key.currentState?.updatePoints(newPoints);
+  void updatePoints(List<Point> points) {
+    key.currentState?.updatePoints(points);
   }
 }
 
 class _DrawingViewState extends State<DrawingView> {
-  List<Point> points = [];
-  bool isDrawing = false;
+  List<Point> _points = [];
+  bool _isDrawing = false;
 
-  void updatePoints(List<Point> newPoints) {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void updatePoints(List<Point> points) {
     setState(() {
-      points = newPoints;
+      _points = points;
     });
   }
 
-  void setDrawing(bool drawing) {
+  void setDrawing(bool isDrawing) {
     setState(() {
-      isDrawing = drawing;
+      _isDrawing = isDrawing;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CustomPaint(
-          painter: _DrawingPainter(points),
-        ),
-        if (isDrawing)
-          Center(
-            child: Text(
-              '绘制中',
-              style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
-            ),
-          ),
-      ],
+    return CustomPaint(
+      painter: _DrawingPainter(_points),
     );
   }
 }
@@ -63,8 +56,8 @@ class _DrawingPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = Colors.black
-      ..strokeWidth = 4.0
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 5.0;
 
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null) {
@@ -78,7 +71,7 @@ class _DrawingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
 }
