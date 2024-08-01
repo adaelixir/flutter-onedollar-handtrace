@@ -17,7 +17,7 @@ class GestureService {
   final List<Point> points = [];
   bool isDrawing = false;
   bool isServiceActive = false;
-  bool isLongPressing = false;
+  bool isScaling = false;
 
   GestureService(this.drawingView, this.callback, this.popupView, this.context);
 
@@ -32,36 +32,38 @@ class GestureService {
     drawingView.setDrawing(false); // 更新绘制状态
   }
 
-  void handleLongPressStart(LongPressStartDetails details) {
-    isLongPressing = true;
-    if (isServiceActive) {
-      // Deactivate service if it is already active
-      deactivateService();
-      SnackbarView.showSnackbar(context, "退出绘制模式");
-    } else {
-      // Activate service if it is not active
-      activateService();
-      SnackbarView.showSnackbar(context, "进入绘制模式");
-    }
-  }
-
-  void handlePanStart(DragStartDetails details) {
-    if (isServiceActive && !isLongPressing) {
+  void handleScaleStart(ScaleStartDetails details) {
+    if (details.pointerCount == 2) {
+      isScaling = true;
+      if (isServiceActive) {
+        // Deactivate service if it is already active
+        deactivateService();
+        SnackbarView.showSnackbar(context, "退出绘制模式");
+      } else {
+        // Activate service if it is not active
+        activateService();
+        SnackbarView.showSnackbar(context, "进入绘制模式");
+      }
+    } else if (details.pointerCount == 1 && isServiceActive && !isScaling) {
       isDrawing = true;
       points.clear(); // 清空之前的点
       drawingView.setDrawing(true); // 更新绘制状态
     }
   }
 
-  void handlePanUpdate(DragUpdateDetails details) {
-    if (isDrawing) {
-      points.add(Point(details.localPosition.dx, details.localPosition.dy));
+  void handleScaleUpdate(ScaleUpdateDetails details) {
+    if (isScaling && details.pointerCount == 2) {
+      // 处理放缩逻辑
+    } else if (isDrawing && details.pointerCount == 1) {
+      points.add(Point(details.focalPoint.dx, details.focalPoint.dy));
       drawingView.updatePoints(points);
     }
   }
 
-  void handlePanEnd(DragEndDetails details) {
-    if (isDrawing) {
+  void handleScaleEnd(ScaleEndDetails details) {
+    if (isScaling) {
+      isScaling = false;
+    } else if (isDrawing) {
       if (points.isNotEmpty) {
         final result = recognizer.recognize(points);
         callback(result.name, result.score);
@@ -86,10 +88,9 @@ class GestureService {
 
   Widget buildGestureDetector(BuildContext context) {
     return GestureDetector(
-      onLongPressStart: handleLongPressStart,
-      onPanStart: handlePanStart,
-      onPanUpdate: handlePanUpdate,
-      onPanEnd: handlePanEnd,
+      onScaleStart: handleScaleStart,
+      onScaleUpdate: handleScaleUpdate,
+      onScaleEnd: handleScaleEnd,
       child: drawingView,
     );
   }
