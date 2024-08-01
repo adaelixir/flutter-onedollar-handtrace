@@ -5,7 +5,8 @@ class PopupView {
 
   PopupView(this.context);
 
-  void showPopup({required Widget content, double heightFraction = 1 / 3}) {
+  void showPopup(BuildContext context,
+      {required Widget content, double heightFraction = 1 / 3}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

@@ -22,10 +22,6 @@ class OneDollarRecognizer {
   }
 
   RecognitionResult recognize(List<Point> points) {
-    if (points.isEmpty) {
-      return RecognitionResult("", 0.0);
-    }
-
     var processedPoints = DollarUtils.resample(points, DollarUtils.NUMPOINTS);
     final radians = DollarUtils.indicativeAngle(points);
     processedPoints = DollarUtils.rotateBy(processedPoints, -radians);
