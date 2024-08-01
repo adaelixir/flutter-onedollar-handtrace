@@ -25,7 +25,7 @@ class GestureService {
 
   void activateService() {
     isServiceActive = true;
-    points.clear();
+    // points.clear();
   }
 
   void handleScaleStart(ScaleStartDetails details) {
