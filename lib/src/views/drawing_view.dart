@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../recognizers/common/data/point.dart';
+import 'package:flutter_onedollar_handtrace/flutter_onedollar_handtrace.dart';
 
 class DrawingView extends StatefulWidget {
-  final GlobalKey<_DrawingViewState> key;
+  final GlobalKey<DrawingViewState> key;
 
   DrawingView({required this.key}) : super(key: key);
 
   @override
-  _DrawingViewState createState() => _DrawingViewState();
+  DrawingViewState createState() => DrawingViewState();
 
   void setDrawing(bool isDrawing) {
     key.currentState?.setDrawing(isDrawing);
@@ -18,54 +18,47 @@ class DrawingView extends StatefulWidget {
   }
 }
 
-class _DrawingViewState extends State<DrawingView> {
-  List<Point> _points = [];
-  bool _isDrawing = false;
+class DrawingViewState extends State<DrawingView> {
+  bool isDrawing = false;
+  List<Point> points = [];
 
-  @override
-  void initState() {
-    super.initState();
+  void setDrawing(bool isDrawing) {
+    setState(() {
+      this.isDrawing = isDrawing;
+    });
   }
 
   void updatePoints(List<Point> points) {
     setState(() {
-      _points = points;
-    });
-  }
-
-  void setDrawing(bool isDrawing) {
-    setState(() {
-      _isDrawing = isDrawing;
+      this.points = points;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _DrawingPainter(_points),
+      painter: _GesturePainter(points),
     );
   }
 }
 
-class _DrawingPainter extends CustomPainter {
+class _GesturePainter extends CustomPainter {
   final List<Point> points;
 
-  _DrawingPainter(this.points);
+  _GesturePainter(this.points);
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 5.0;
+      ..color = Colors.red
+      ..strokeWidth = 4.0
+      ..style = PaintingStyle.stroke;
 
-    for (int i = 0; i < points.length - 1; i++) {
-      if (points[i] != null && points[i + 1] != null) {
-        canvas.drawLine(
-          Offset(points[i].x, points[i].y),
-          Offset(points[i + 1].x, points[i + 1].y),
-          paint,
-        );
+    if (points.isNotEmpty) {
+      for (int i = 0; i < points.length - 1; i++) {
+        final p1 = Offset(points[i].x, points[i].y);
+        final p2 = Offset(points[i + 1].x, points[i + 1].y);
+        canvas.drawLine(p1, p2, paint);
       }
     }
   }
