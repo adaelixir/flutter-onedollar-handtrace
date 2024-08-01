@@ -54,22 +54,13 @@ class GestureService {
     if (isScaling) {
       isScaling = false;
     } else if (isDrawing) {
-      final result = recognizer.recognize(points);
-      callback(result.name, result.score);
+      if (points.isNotEmpty) {
+        final result = recognizer.recognize(points);
+        callback(result.name, result.score);
+      }
       isDrawing = false;
       points.clear();
       drawingView.setDrawing(false); // 更新绘制状态
-      PopupView(context).showPopup(
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '轨迹名称: ${result.name}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      );
     }
   }
 
