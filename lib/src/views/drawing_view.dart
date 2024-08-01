@@ -1,68 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onedollar_handtrace/src/recognizers/common/data/point.dart';
+import '../recognizers/common/data/point.dart';
 
 class DrawingView extends StatefulWidget {
-  final Color drawingColor;
-  final double strokeWidth;
+  @override
+  _DrawingViewState createState() => _DrawingViewState();
 
-  DrawingView({this.drawingColor = Colors.blue, this.strokeWidth = 4.0});
-
-  final _DrawingViewState _state = _DrawingViewState();
-
-  void updatePoints(List<Point> points) {
-    _state.updatePoints(points);
+  // 添加 setDrawing 方法
+  void setDrawing(bool drawing) {
+    _DrawingViewState? state = _DrawingViewState();
+    state?.setDrawing(drawing);
   }
 
-  @override
-  _DrawingViewState createState() => _state;
+  // 添加 updatePoints 方法
+  void updatePoints(List<Point> newPoints) {
+    _DrawingViewState? state = _DrawingViewState();
+    state?.updatePoints(newPoints);
+  }
 }
 
 class _DrawingViewState extends State<DrawingView> {
-  List<Point> _points = [];
+  List<Point> points = [];
+  bool isDrawing = false;
 
-  void updatePoints(List<Point> points) {
+  void updatePoints(List<Point> newPoints) {
     setState(() {
-      _points = List.from(points);
+      points = newPoints;
+    });
+  }
+
+  void setDrawing(bool drawing) {
+    setState(() {
+      isDrawing = drawing;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: CustomPaint(
-        painter:
-            DrawingPainter(_points, widget.drawingColor, widget.strokeWidth),
-        child: Container(),
-      ),
+    return Stack(
+      children: [
+        CustomPaint(
+          painter: _DrawingPainter(points),
+        ),
+        if (isDrawing)
+          Center(
+            child: Text(
+              '绘制中',
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+            ),
+          ),
+      ],
     );
   }
 }
 
-class DrawingPainter extends CustomPainter {
+class _DrawingPainter extends CustomPainter {
   final List<Point> points;
-  final Color drawingColor;
-  final double strokeWidth;
 
-  DrawingPainter(this.points, this.drawingColor, this.strokeWidth);
+  _DrawingPainter(this.points);
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = drawingColor
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
+      ..color = Colors.black
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round;
 
-    for (int i = 1; i < points.length; i++) {
-      canvas.drawLine(
-        Offset(points[i - 1].x, points[i - 1].y),
-        Offset(points[i].x, points[i].y),
-        paint,
-      );
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != null && points[i + 1] != null) {
+        canvas.drawLine(
+          Offset(points[i].x, points[i].y),
+          Offset(points[i + 1].x, points[i + 1].y),
+          paint,
+        );
+      }
     }
   }
 
   @override
-  bool shouldRepaint(DrawingPainter oldDelegate) =>
-      oldDelegate.points != points;
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
 }

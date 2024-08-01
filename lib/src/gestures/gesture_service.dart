@@ -36,6 +36,7 @@ class GestureService {
     } else if (details.pointerCount == 1 && !isScaling) {
       isDrawing = true;
       activateService();
+      drawingView.setDrawing(true); // 更新绘制状态
     }
   }
 
@@ -55,6 +56,7 @@ class GestureService {
       isDrawing = false;
       isScaling = false;
       points.clear();
+      drawingView.setDrawing(false); // 更新绘制状态
       PopupView(context).showPopup(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,11 +64,6 @@ class GestureService {
             Text(
               '轨迹名称: ${result.name}',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              '分数: ${result.score}',
-              style: TextStyle(fontSize: 20),
             ),
           ],
         ),
