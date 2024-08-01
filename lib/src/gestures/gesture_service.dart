@@ -54,7 +54,6 @@ class GestureService {
       final result = recognizer.recognize(points);
       callback(result.name, result.score);
       isDrawing = false;
-      isScaling = false;
       points.clear();
       PopupView(context).showPopup(
         content: Column(
