@@ -3,8 +3,12 @@ import 'package:flutter_onedollar_handtrace/flutter_onedollar_handtrace.dart';
 
 class DrawingView extends StatefulWidget {
   final GlobalKey<DrawingViewState> key;
+  final Color lineColor;
+  final double strokeWidth;
 
-  DrawingView({required this.key}) : super(key: key);
+  DrawingView(
+      {required this.key, this.lineColor = Colors.red, this.strokeWidth = 4.0})
+      : super(key: key);
 
   @override
   DrawingViewState createState() => DrawingViewState();
@@ -37,21 +41,28 @@ class DrawingViewState extends State<DrawingView> {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _GesturePainter(points),
+      painter: _GesturePainter(
+        points,
+        lineColor: widget.lineColor,
+        strokeWidth: widget.strokeWidth,
+      ),
     );
   }
 }
 
 class _GesturePainter extends CustomPainter {
   final List<Point> points;
+  final Color lineColor;
+  final double strokeWidth;
 
-  _GesturePainter(this.points);
+  _GesturePainter(this.points,
+      {required this.lineColor, required this.strokeWidth});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.red
-      ..strokeWidth = 4.0
+      ..color = lineColor
+      ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
     if (points.isNotEmpty) {
