@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import '../views/drawing_view.dart';
+import '../views/popup_view.dart';
+import '../views/snack_view.dart';
 import '../recognizers/trajectory_recognizer.dart';
 import '../recognizers/common/data/point.dart';
-import '../views/drawing_view.dart';
 
 typedef GestureRecognitionCallback = void Function(String name, double score);
-typedef CustomSnackbarBuilder = void Function(BuildContext context);
+typedef CustomSnackbarBuilder = void Function(
+    BuildContext context, String message);
 typedef CustomPopupBuilder = void Function(
     BuildContext context, String name, double score);
 
@@ -25,8 +28,8 @@ class GestureService {
     required this.context,
     required this.callback,
     required this.drawingView,
-    required this.popupBuilder,
-    required this.snackbarBuilder,
+    this.popupBuilder = PopupView.showPopup,
+    this.snackbarBuilder = SnackbarView.showSnackbar,
   });
 
   void activateService() {
@@ -39,7 +42,7 @@ class GestureService {
       isScaling = true;
       isDrawing = false;
       isServiceActive = false;
-      snackbarBuilder(context);
+      snackbarBuilder(context, "请使用单指圈选区域");
     } else if (details.pointerCount == 1 && !isScaling) {
       isDrawing = true;
       activateService();

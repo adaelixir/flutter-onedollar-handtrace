@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SnackbarView {
-  final BuildContext context;
-
-  SnackbarView(this.context);
-
-  static showSnackbar(BuildContext context, String message) {
+  static void showSnackbar(BuildContext context, String message) {
     final overlay = Overlay.of(context);
+    if (overlay == null) return;
+
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         top: 50.0,
