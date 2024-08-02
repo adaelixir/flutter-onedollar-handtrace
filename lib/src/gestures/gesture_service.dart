@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import '../recognizers/trajectory_recognizer.dart';
 import '../recognizers/common/data/point.dart';
 import '../views/drawing_view.dart';
-import '../views/snack_view.dart';
-import '../views/popup_view.dart';
 
 typedef GestureRecognitionCallback = void Function(String name, double score);
+typedef CustomSnackbarBuilder = void Function(BuildContext context);
+typedef CustomPopupBuilder = void Function(
+    BuildContext context, String name, double score);
 
 class GestureService {
   final DrawingView drawingView;
   final GestureRecognitionCallback callback;
-  final SnackbarView snackbarView;
-  final PopupView popupView;
+  final CustomSnackbarBuilder snackbarBuilder;
+  final CustomPopupBuilder popupBuilder;
   final BuildContext context;
 
   final TrajectoryRecognizer recognizer = TrajectoryRecognizer();
@@ -20,8 +21,13 @@ class GestureService {
   bool isServiceActive = false;
   bool isScaling = false;
 
-  GestureService(this.drawingView, this.callback, this.snackbarView,
-      this.popupView, this.context);
+  GestureService({
+    required this.context,
+    required this.callback,
+    required this.drawingView,
+    required this.popupBuilder,
+    required this.snackbarBuilder,
+  });
 
   void activateService() {
     isServiceActive = true;
@@ -33,7 +39,7 @@ class GestureService {
       isScaling = true;
       isDrawing = false;
       isServiceActive = false;
-      SnackbarView.showSnackbar(context, "请使用单指圈选区域");
+      snackbarBuilder(context);
     } else if (details.pointerCount == 1 && !isScaling) {
       isDrawing = true;
       activateService();
@@ -57,18 +63,7 @@ class GestureService {
       if (points.isNotEmpty) {
         final result = recognizer.recognize(points);
         callback(result.name, result.score);
-        PopupView.showPopup(
-          context,
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '轨迹名称: ${result.name}',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        );
+        popupBuilder(context, result.name, result.score);
       }
       isDrawing = false;
       points.clear();
