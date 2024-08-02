@@ -66,7 +66,9 @@ class GestureService {
       if (points.isNotEmpty) {
         final result = recognizer.recognize(points);
         callback(result.name, result.score);
-        popupBuilder(context, result.name, result.score);
+        if (result.name.isNotEmpty && !result.score.isInfinite) {
+          popupBuilder(context, result.name, result.score);
+        }
       }
       isDrawing = false;
       points.clear();
