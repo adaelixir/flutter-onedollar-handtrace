@@ -71,7 +71,7 @@ GestureService(
     // 自定义弹出窗口逻辑
   },
   snackbarBuilder: (context, message) {
-    // 自定义 Snackbar 逻辑
+    // 自定义提示栏逻辑
   },
 )
 ```
