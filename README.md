@@ -7,12 +7,14 @@ c. 自定义识别结果展示（弹出窗口和提示栏）<br/>
 d. 支持单指绘制和双指缩放<br/>
 e. 可扩展的模板系统，支持添加自定义手势<br/>
 
-<div style="display: flex; gap:0; justify-content:space-around">
-  <img src="./docs/wakeup.gif" alt="Wakeup" style="width: 25%; height: auto;">
-  <img src="./docs/circle.gif" alt="Circle" style="width: 25%; height: auto;">
-  <img src="./docs/check.gif" alt="Check" style="width: 25%; height: auto;">
-  <img src="./docs/star.gif" alt="Star" style="width: 25%; height: auto;">
-</div>
+<table>
+  <tr>
+    <td><img src="./docs/wakeup.gif" alt="Wakeup" style="width: 100%;"></td>
+    <td><img src="./docs/circle.gif" alt="Circle" style="width: 100%;"></td>
+    <td><img src="./docs/check.gif" alt="Check" style="width: 100%;"></td>
+    <td><img src="./docs/star.gif" alt="Star" style="width: 100%;"></td>
+  </tr>
+</table>
 
 ### 安装和使用方法
 
