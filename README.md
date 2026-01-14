@@ -1,5 +1,5 @@
 ### Flutter OneDollar HandTrace
-**Flutter OneDollar HandTrace** 是一个用于手势轨迹识别的 Flutter 包，基于 $1 Unistroke Recognizer 算法。这个包允许您在 Flutter 应用中轻松集成手势识别功能<br/>
+**Flutter OneDollar HandTrace** 是一个用于手势轨迹识别的 Flutter 包，基于 $1 Unistroke Recognizer 算法。这个包允许在 Flutter 应用中轻松集成手势识别功能<br/>
 
 a. 实时手势轨迹绘制<br/>
 b. 基于 $1 Unistroke Recognizer 算法的手势识别<br/>
